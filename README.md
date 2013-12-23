@@ -165,18 +165,18 @@ Before you run the following commands, just review this GitHub page on generatin
 
 Now you can run these commands:
 
-`git config --global color.ui true
-git config --global user.name "your_username"
-git config --global user.email "you@email.com"
-ssh-keygen -t rsa -C "you@email.com"`
+	git config --global color.ui true
+	git config --global user.name "your_username"
+	git config --global user.email "you@email.com"
+	ssh-keygen -t rsa -C "you@email.com"
 
 Make sure you are logged into GitHub, then navigate to this page:https://github.com/settings/ssh
 
-Run this command <cat ~/.ssh/id_rsa.pub> and use the output to add a new ssh key.
+Run this command `cat ~/.ssh/id_rsa.pub` and use the output to add a new ssh key.
 
 Check to see if all of that actually worked by running the following command: 
 
-<ssh -T git@github.com>
+`ssh -T git@github.com
 
 You should receive a response like this:
 
@@ -188,126 +188,134 @@ You are good to go!
 
 
 PART IV - Installing Rails
+==========================
 
-	Installing Rails is quite simple compared to what we had to do in order to lay the ground work. But there is one thing
-	we have to take care of before we can install rails.
+Installing Rails is quite simple compared to what we had to do in order to lay the ground work. But there is one thing
+we have to take care of before we can install rails.
 
-	The Rails asset pipeline requires a javascript runtime in order for it to, for example, precompile Sass into CSS
-	and CoffeeScript into JavaScript. The Rails 4 Gemfile comes with a pre-commented out command to install 'therubyracer' 
-	gem, which would supply your Rails project with the necessary javascript runtime. But we can also install NodeJS, an interesting
-	technology in its own right, giving us a global runtime. Because it is so simple just to uncomment <gem 'therubyracer'>, 
-	we will do here go through installing NodeJS.
+The Rails asset pipeline requires a javascript runtime in order for it to, for example, precompile Sass into CSS
+and CoffeeScript into JavaScript. The Rails 4 Gemfile comes with a pre-commented out command to install 'therubyracer' 
+gem, which would supply your Rails project with the necessary javascript runtime. But we can also install NodeJS, an interesting
+technology in its own right, giving us a global runtime. Because it is so simple just to uncomment `gem 'therubyracer'`, 
+we will do here go through installing NodeJS.
 
-	Visit NodeJS to learn more: http://nodejs.org/
+Visit NodeJS to learn more: http://nodejs.org/
 
-	Run these commands in order:
+Run these commands in order:
 
-		<
-		sudo add-apt-repository ppa:chris-lea/node.js
-		sudo apt-get update
-		sudo apt-get install nodejs
-		>
+	
+	sudo add-apt-repository ppa:chris-lea/node.js
+	sudo apt-get update
+	sudo apt-get install nodejs
+	
 
-	With your javascript runtime in place, now you can <gem install rails>. Yay! Now, quick... run <rails -v> to make sure it worked.
+With your javascript runtime in place, now you can `gem install rails`. Yay! Now, quick... run `rails -v` to make sure it worked.
 
- 
+
 PART V - Installing Postgresql-9.3
+==================================
 
-
-	Run these commands:
-
-		<
-		sudo sh -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
-		wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
-		sudo apt-get update		
-		sudo apt-get postgresql-9.3 pgadmin3
-		>	
-
-	Normally, the first thing you do after installing Postgres is to try and set up a test rails application using <rails new myapp -d postgresql>
-	When you run this command, bundler is going to automatically install the postgres gem <pg>. 
-	
-	This was a failing step for me until I ran this command to install a missing dependency:
-
-		<sudo apt-get install libpq-dev>
+Run these commands to install PostgresQL 9.3 and PGAdmin 3, a graphical user interface for your databases:
 
 	
-	The next step is to create a user with a password.
-		
-		<sudo -u postgres psql newuser> will create a new user named "newuser" and send you into the postgresql terminal.
+	sudo sh -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
+	wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
+	sudo apt-get update		
+	sudo apt-get postgresql-9.3 pgadmin3
+	
 
-		<\password newuser> will allow you to create a password for your new user, which you will be asked to type into the terminal.
-		
+Normally, the first thing you do after installing Postgres is to try and set up a test rails application using <rails new myapp -d postgresql>
+When you run this command, bundler is going to automatically install the postgres gem <pg>. 
 
-	There is just one last thing to do before you can create a test app and launch it, and it requires a text editor and a little knowledge
-	of Ubuntu's file structure. 
+*This was a failing step for me until I ran this command to install a missing dependency*:
 
-	Ubuntu comes with <gedit> and <vim>. I am using vim right now, but it is a little complicated to navigate. I have been learning vim for
-	3 or 4 hours, and am comfortable relying on it as my primary text editor. The version of <vim> that comes prepackaged with Ubuntu is 
-	a lite version, so to upgrade to the full-featured version, run <sudo apt-get install vim> in the command line. 
-
-	You should also pick up <gvim>, which sports a graphical user interface by running <sudo apt-get install gvim>. 
-
-	If you are not familiar with vim, just use <gedit> for this step.
-
-	Ok, now we want to make a test application to make sure we installed everything correctly. 
-
-	Make sure you are in the home directory by running <cd ~/>. (Just to confirm, if you run <pwd>, it should say </home/whatever_your_username_is>.)
+	sudo apt-get install libpq-dev
 
 
-	Let's go into the Documents directory and create a Dev directory, into which we will put our rails test app. 
+The next step is to create a user with a password.
+	
+`sudo -u postgres psql newuser` will create a new user named "newuser" and send you into the postgresql terminal.
 
-	Run these commands:
-
-		<cd Documents>
-		<mkdir Dev>
-		<cd Dev>
-
-	Now, let's make our rails test app by running: 
-
-		<rails new myapp -d postgresql>
+`\password newuser` will allow you to create a password for your new user, which you will be asked to type into the terminal.
 
 	
-	Then run <cd myapp> in order to change into the myapp directory. 
+A slight detour
+------------
 
-	Run <cd config> to enter the config directory. Now type <gedit database.yml> or <vim database.yml> in order to open up the database 
-	configuration file in your text editor of choice. 
+There is just one last thing to do before you can create a test app and launch it, and it requires a text editor and a little knowledge
+of Ubuntu's file structure. 
+
+Ubuntu comes with `gedit` and `vim`. I am using `vim` right now. However, `vim` takes some practice. I have been learning `vim` for
+3 or 4 hours, and am comfortable relying on it as my primary text editor. The version of `vim` that comes prepackaged with Ubuntu is 
+a lite version, so to upgrade to the full-featured version, run `sudo apt-get install vim` in the command line. 
+
+You should also pick up `gvim`, which sports a graphical user interface by running `sudo apt-get install gvim`. 
+
+If you are not familiar with `vim`, just use `gedit` for this step.
+
+
+Back on track
+-------------
+
+Ok, now we want to make a test application to see that we installed everything correctly. 
+
+Make sure you are in the home directory by running `cd ~/`. (Just to confirm, if you run `pwd`, it should say `/home/whatever_your_username_is`.)
+
+
+Let's go into the Documents directory and create a Dev directory, into which we will put our rails test app. 
+
+Run these commands:
+
+	cd Documents
+	mkdir Dev
+	cd Dev
+
+Now, let's make our rails test app by running: 
+
+	rails new myapp -d postgresql
+
+
+Use `cd myapp` to change into the myapp directory. 
+
+Run `cd config` to enter the config directory. Now type `gedit database.yml` or `vim database.yml` in order to open up the database 
+configuration file in your text editor of choice. 
+
+You should look for code like this for development, testing, and production environments:
+
 	
-	You should look for code like this for development, testing, and production environments:
+	development:
+	  adapter: postgresql
+	  encoding: unicode
+	  database: myapp_development 
+	  pool: 5
+	  username: 
+	  password: 	
+	
 
-		<
-		development:
-		  adapter: postgresql
-		  encoding: unicode
-		  database: myapp_development 
-		  pool: 5
-		  username: 
-		  password: 	
-		>
+There is a little bit of configuration we need to do so we do not run into any errors when we launch our app.
 
-	There is a little bit of configuration we need to do so we do not run into any errors when we launch our app.
+Ensure that, for each environment, you include the username and password you used created previously in postgresql, 
+and that you set `host: localhost`. Your code should look like this:
 
-	Ensure that, for each environment, you include the username and password you used created previously in postgresql, 
-	and that you set <host: localhost>. Your code should look like this:
-
-		<
-		development:
-		  adapter: postgresql
-		  encoding: unicode
-		  database: myapp_development 
-		  host: localhost
-		  pool: 5
-		  username: new_user
-		  password: password	
-		>
+	
+	development:
+	  adapter: postgresql
+	  encoding: unicode
+	  database: myapp_development 
+	  host: localhost
+	  pool: 5
+	  username: new_user
+	  password: password	
+	
 
 
-	Now, go back one level into your application's root directory by running <cd ../> and set up your database
-	by running <rake db:create>. 
+Now, go back one level into your application's root directory by running `cd ../` and set up your database
+by running `rake db:create`. 
 
-	If you see no indication of success or failure upon the completion of the command, that means it succeeded! Yay! 
+If you see no indication of success or failure upon the completion of the command, that means it succeeded! Yay! 
 
-	Now run <rails s> to start your server. When the server is loaded, fire up firefox and goto localhost:3000
-	and you should see a page telling you that you are riding ruby on rails, or something like that... 
+Now run `rails s` to start your server. When the server is loaded, fire up firefox and goto localhost:3000
+and you should see a page telling you that you are riding ruby on rails, or something like that... 
 
-	Congrats!	
+Congrats!	
 
