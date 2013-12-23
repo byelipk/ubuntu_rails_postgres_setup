@@ -41,7 +41,7 @@ What to expect?
 * An approximate time to complete some step in the process.
 
 
-My host machine is a Lenovo T400 running Windows 7 32-bit. 
+*My host machine is a Lenovo T400 running Windows 7 32-bit.* 
 
 __Let's go!__
 
@@ -58,7 +58,7 @@ You can get the downloads here:
 
 * Ubuntu 12.04 LTS: http://www.ubuntu.com/download/desktop
 	
-approx_time (15min) 
+*approx_time (15min)* 
 
 
 ###VMWare Player Installation:
