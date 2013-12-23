@@ -48,8 +48,8 @@ __Let's go!__
 
 
 
-__PART I__ - Set up the Ubuntu Virtual Machine
-
+PART I - Set up the Ubuntu Virtual Machine
+======
 The first thing you need to do is download VMWare Player and Ubuntu from your host machine.
 
 You can get the downloads here: 
