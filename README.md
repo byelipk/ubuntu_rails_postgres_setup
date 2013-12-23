@@ -135,14 +135,14 @@ We will use *Ruby Version Manager* (RVM) to handle installing Ruby, as well as o
 
 Paste these commands line-by-line into the terminal:
 
-	
-`sudo apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev`
-`curl -L https://get.rvm.io | bash -s stable`
-`source ~/.rvm/scripts/rvm`
-`echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc`
-`rvm install 2.0.0-p353`
-`rvm use 2.0.0-p353 --default`
-`ruby -v`
+		
+	sudo apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
+	curl -L https://get.rvm.io | bash -s stable
+	source ~/.rvm/scripts/rvm
+	echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
+	rvm install 2.0.0-p353
+	rvm use 2.0.0-p353 --default
+	ruby -v
 
 
 Essentially, we're downloading RVM (notice that it is not with `apt-get`), and then installing Ruby.
