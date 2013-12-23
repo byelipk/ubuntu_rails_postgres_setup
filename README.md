@@ -1,25 +1,50 @@
-ubuntu_rails_postgres_setup
-===========================
-This is an aide-memoire on the steps to installing Rails v 4.0, Ruby v 2.0, and
-Postgresql v 9.3 on Ubuntu 12.04LTS running on a VMWare Player virtual machine. This
-is NOT meant to be comphrehensive, and is aimed at developers who have been working with ruby and rails
+Set up a virtual environment for Rails development on Ubuntu 12.04LTS
+=====================================================================
+
+This is an aide-memoire on the steps to installing Rails v 4.0.2, Ruby v 2.0.0, and
+Postgresql 9.3 on Ubuntu 12.04LTS running on a VMWare Player virtual machine. 
+
+This is NOT meant to be comphrehensive, and is aimed at developers who have been working with ruby and rails
 in a Windows environment, but now seek to switch over to a unix development environment.
 
-You may want to switch to a unix dev environment because there are many gems available that enhance your
+Why use a virtual environment for rails development?
+----------------------------------------------------
+
+You may want to switch to a unix environment because there are many gems available that enhance your
 workflow as a rails developer, and improve the performance of your application. However, getting them to
-install on a Windows machine is either painful or impossible. Another reason is that more often than not,
-your application will be run in production on a unix machine, and it is good practice to develop in the 
-environment your application will be run in.
- 
-I will go over particular hick-ups and gotchas you should expect to experience during the installation.
+install on a Windows machine is either painful or impossible. 
 
-I may give an approximate time to complete some step in the process. If I do not, it means that step took < 1 minute to complete.
+Another reason is that more often than not, your application will be run in production on a unix machine, 
+and it is good practice to develop in the environment your application will be run in. 
 
-Unix command line operations and ruby code will ALWAYS be within <less_than greater_than> characters.
+If you are starting out learning rails and or ruby, you will find that many of the quality screencasts and 
+online tutorials available are written on a unix system (either Linux or Mac). Following along can be somewhat
+tricky because are seeing all these different symbols and commands and directory structures that are not
+applicable to your situation. Even the code snippets you find on Github, Heroku, and other rails books use unix symbology. 
+
+Your brain has to filter these distractions out, abstract the useful information, and apply it to your situation 
+in the Windows environment. The cost of that tiny extra amount of energy it takes for your brain to process all 
+these additonal tasks takes it toll over time. 
+
+Computer programming and web development are complicated enough subjects on their own. So, it is wise to do what 
+you can to minimize the distractions you have control over. You will experience a much improved workflow, and will have 
+much more fun, by following along these tutorials in the unix environment they were written in.
+
+
+What to expect?
+---------------
+
+* Code snippets you can copy and paste into your unix terminal
+
+* Particular hick-ups and gotchas you should expect to experience during the installation.
+
+* An approximate time to complete some step in the process.
+
 
 My host machine is a Lenovo T400 running Windows 7 32-bit. 
 
-Let's go!
+__Let's go!__
+
 
 
 
