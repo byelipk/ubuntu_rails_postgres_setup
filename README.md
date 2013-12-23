@@ -83,11 +83,11 @@ When you load up VM Player, you can install Ubuntu!
 
 ###Ubuntu Virtual Machine set up:		
 
-Run the vmplayer.exe and go through the process of creating a new virtual environment.
+* Run the vmplayer.exe and go through the process of creating a new virtual environment.
 
-I chose to allocate 20gb of ram and 1gb of memory to the VM.
+* You also need to reference the file location of the Ubuntu .iso you downloaded. 
 
-You also need to reference the file location of the Ubuntu .iso you downloaded. 
+* I chose to allocate 20gb of ram and 1gb of memory to the VM.
 
 Ubuntu will install the first time you click `Run`. 
 
@@ -102,9 +102,9 @@ PART II - Set up your Ubuntu environment
 NOTE: As I am starting out on Ubuntu myself, many of the unix commands you see were taken from 
 this tutorial: http://gorails.com/setup/ubuntu/13.10
 
-It was very helpful to me and I suggest you check it out. As of this writing, they seem to be in the
-process of developing some screencasts. So, if you are new to rails/programming, it would be worth it to check
-them out.		
+It was very helpful to me and I suggest you check it out.		
+
+###Update your system
 
 The first thing you need to do once you have logged into Ubuntu is to enter the terminal
 and run: 
@@ -120,22 +120,29 @@ the terminal.*
 The command `sudo` gives you root user privilages. The entire command would fail without `sudo`.
 
 Once your system is updated, you can install the dependencies you will need.
+
+###Install additional dependencies
+
 Copy the command inside the below and paste it into your terminal:
 
 `sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev 
 libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev`
 
-We will use *Ruby Version Manager* (RVM) to handle installing Ruby, as well as other gems. So, here we go!
+
+###Install RVM
+
+We will use *Ruby Version Manager* (RVM) to handle installing Ruby, as well as other gems.
 
 Paste these commands line-by-line into the terminal:
+
 	
-`sudo apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
-curl -L https://get.rvm.io | bash -s stable
-source ~/.rvm/scripts/rvm
-echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
-rvm install 2.0.0-p353
-rvm use 2.0.0-p353 --default
-ruby -v`
+`sudo apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev`
+`curl -L https://get.rvm.io | bash -s stable`
+`source ~/.rvm/scripts/rvm`
+`echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc`
+`rvm install 2.0.0-p353`
+`rvm use 2.0.0-p353 --default`
+`ruby -v`
 
 
 Essentially, we're downloading RVM (notice that it is not with `apt-get`), and then installing Ruby.
