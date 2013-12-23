@@ -10,6 +10,8 @@ in a Windows environment, but now seek to switch over to a unix development envi
 Why use a virtual environment for rails development?
 ----------------------------------------------------
 
+###In general
+
 You may want to switch to a unix environment because there are many gems available that enhance your
 workflow as a rails developer, and improve the performance of your application. However, getting them to
 install on a Windows machine is either painful or impossible. 
@@ -17,22 +19,26 @@ install on a Windows machine is either painful or impossible.
 Another reason is that more often than not, your application will be run in production on a unix machine, 
 and it is good practice to develop in the environment your application will be run in. 
 
+###For the beginner
+
 If you are starting out learning rails and or ruby, you will find that many of the quality screencasts and 
 online tutorials available are written on a unix system (either Linux or Mac). Following along can be somewhat
-tricky because are seeing all these different symbols and commands and directory structures that are not
-applicable to your situation. Even the code snippets you find on Github, Heroku, and other rails books use unix symbology. 
+tricky because you are seeing all these different symbols and commands and directory structures that are not
+applicable to your situation. Even the code snippets you find on Github, Heroku, and in rails books use unix 
+symbology. 
 
-Your brain has to filter these distractions out, abstract the useful information, and apply it to your situation 
-in the Windows environment. The cost of that tiny extra amount of energy it takes for your brain to process all 
-these additonal tasks takes it toll over time. 
+Your Windows-geard brain has to filter these distractions out, abstract the useful information, and apply it to 
+your current situation in the Windows environment. The cost of that tiny extra amount of energy it takes your 
+brain to process all these additonal tasks takes it toll over time. 
 
 Computer programming and web development are complicated enough subjects on their own. So, it is wise to do what 
 you can to minimize the distractions you have control over. You will experience a much improved workflow, and will have 
-much more fun, by following along these tutorials in the unix environment they were written in.
+much more fun, by following along these tutorials in the unix environment they were written in. 
 
 
 What to expect?
 ---------------
+
 
 * Code snippets you can copy and paste into your unix terminal
 
@@ -43,13 +49,15 @@ What to expect?
 
 *My host machine is a Lenovo T400 running Windows 7 32-bit.* 
 
-__Let's go!__
+
+__Ok, let's go!__
 
 
 
 
 PART I - Set up the Ubuntu Virtual Machine
-======
+==========================================
+
 The first thing you need to do is download VMWare Player and Ubuntu from your host machine.
 
 You can get the downloads here: 
@@ -64,108 +72,112 @@ You can get the downloads here:
 ###VMWare Player Installation:
 	
 This is a fairly typical set up, so I will not go into detail. However, to save space I installed the VM on an external hard drive. 
-My file structure looks like this: 		
+As a result, my file structure looks like this: 		
 
 `F:/VM`
 	
 When you load up VM Player, you can install Ubuntu!
 
-approx_time (2min)
+*approx_time (2min)*
 
 
 ###Ubuntu Virtual Machine set up:		
 
-Run the vmplayer.exe and go through the process of creating a new VM.
+Run the vmplayer.exe and go through the process of creating a new virtual environment.
+
 I chose to allocate 20gb of ram and 1gb of memory to the VM.
+
+You also need to reference the file location of the Ubuntu .iso you downloaded. 
 
 Ubuntu will install the first time you click `Run`. 
 
-This takes some time, but you will have a nice, clean, fresh Ubuntu install. Yay!
+The complete installation takes some time, but you will have a nice, clean, fresh Ubuntu install. Yay!
 
-approx_time(30-45min)
+*approx_time(30-45min)*
 
 
 PART II - Set up your Ubuntu environment
+========================================
 
-	NOTE: As I am starting out on Ubuntu myself, many of the unix commands you see were taken from 
-	this tutorial: http://gorails.com/setup/ubuntu/13.10
+NOTE: As I am starting out on Ubuntu myself, many of the unix commands you see were taken from 
+this tutorial: http://gorails.com/setup/ubuntu/13.10
+
+It was very helpful to me and I suggest you check it out. As of this writing, they seem to be in the
+process of developing some screencasts. So, if you are new to rails/programming, it would be worth it to check
+them out.		
+
+The first thing you need to do once you have logged into Ubuntu is to enter the terminal
+and run: 
+
+`sudo apt-get update` 
+
+*NOTE: You can find the terminal by moving your cursor over to the left-hand side of the screen and moving it
+up to the top-most icon named 'Dash.' Once you click on 'Dash' you will be brought to a search box where you can
+just enter 'terminal' and the icon for Ubuntu's command line interface will appear. Click on it, and you are inside
+the terminal.*
+
+`apt` is Ubuntu's package manager, and you will be using it a lot.
+The command `sudo` gives you root user privilages. The entire command would fail without `sudo`.
+
+Once your system is updated, you can install the dependencies you will need.
+Copy the command inside the below and paste it into your terminal:
+
+`sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev 
+libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev`
+
+We will use *Ruby Version Manager* (RVM) to handle installing Ruby, as well as other gems. So, here we go!
+
+Paste these commands line-by-line into the terminal:
 	
-	It was very helpful to me and I suggest you check it out. As of this writing, they seem to be in the
-	process of developing some screencasts. So, if you are new to rails/programming, it would be worth it to check
-	them out.		
+`sudo apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
+curl -L https://get.rvm.io | bash -s stable
+source ~/.rvm/scripts/rvm
+echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
+rvm install 2.0.0-p353
+rvm use 2.0.0-p353 --default
+ruby -v`
 
-	The first thing you need to do once you have logged into Ubuntu is to enter the terminal
-	and run: 
+
+Essentially, we're downloading RVM (notice that it is not with `apt-get`), and then installing Ruby.
 		
-		<sudo apt-get update> 
+I will forgoe a breakdown of these commands for the moment, but will post it when I know exactly what is going on.
 
-	NOTE: You can find the terminal by moving your cursor over to the left-hand side of the screen and moving it
-	up to the top-most icon named 'Dash.' Once you click on 'Dash' you will be brought to a search box where you can
-	just enter 'terminal' and the icon for Ubuntu's command line interface will appear. Click on it, and you are inside
-	the terminal.
+Run this command to tell RubyGems not to install documentation for each package locally:
 
-	<apt> is Ubuntu's package manager, and you will be using it a lot.
-	The command <sudo> gives you root user privilages. The entire command would fail without <sudo>.
-
-	Once your system is updated, you can install the dependencies you will need.
-	Copy the command inside the <> and paste into your terminal:
-
-		<sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev 
-		libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev>
-
-	We will use Ruby Version Manager (RVM) to handle installing Ruby, as well as other gems. So, here we go!
-	Paste these commands line-by-line into the terminal:
-		
-		<
-		sudo apt-get install libgdbm-dev libncurses5-dev automake libtool bison libffi-dev
-		curl -L https://get.rvm.io | bash -s stable
-		source ~/.rvm/scripts/rvm
-		echo "source ~/.rvm/scripts/rvm" >> ~/.bashrc
-		rvm install 2.0.0-p353
-		rvm use 2.0.0-p353 --default
-		ruby -v
-		>
-
-	Essentially, we're downloading RVM (notice that it is not with <apt-get>), and than installing Ruby.		
-	I will forgoe a breakdown of these commands for the moment, but will post it when I know exactly what is going on.
-	
-	Run this command to tell RubyGems not to install documentation for each package locally:
-
-		<echo "gem: --no-ri --no-rdoc" > ~/.gemrc> 
-				
-	approx_time (5mins)
+`echo "gem: --no-ri --no-rdoc" > ~/.gemrc` 
+			
+*approx_time (5mins)*
 
 
 PART III - Configuring GIT version control
+==========================================
 
-	You will need to create an account if you do not already have one. Go here: https://github.com/
+Note: You will need to create an account if you do not already have one. Go here: https://github.com/
 
-	Before you run the following commands, just review this GitHub page on generating ssh keys: https://help.github.com/articles/generating-ssh-keys 
-	
-	Now you can run these commands:
-		
-		<
-		git config --global color.ui true
-		git config --global user.name "your_username"
-		git config --global user.email "you@email.com"
-		ssh-keygen -t rsa -C "you@email.com"
-		>
-	
-	Make sure you are logged into GitHub, then navigate to this page:https://github.com/settings/ssh
+Before you run the following commands, just review this GitHub page on generating ssh keys: https://help.github.com/articles/generating-ssh-keys 
 
-	Run this command <cat ~/.ssh/id_rsa.pub> and use the output to add a new ssh key.
+Now you can run these commands:
 
-	Check to see if all of that actually worked by running the following command: 
+`git config --global color.ui true
+git config --global user.name "your_username"
+git config --global user.email "you@email.com"
+ssh-keygen -t rsa -C "you@email.com"`
 
-		<ssh -T git@github.com>
+Make sure you are logged into GitHub, then navigate to this page:https://github.com/settings/ssh
 
-	You should receive a response like this:
+Run this command <cat ~/.ssh/id_rsa.pub> and use the output to add a new ssh key.
 
-		Hi your_username! You've successfully authenticated, but GitHub does not provide shell access.
+Check to see if all of that actually worked by running the following command: 
 
-	You are good to go!
+<ssh -T git@github.com>
 
-	approx_time (5mins)
+You should receive a response like this:
+
+	Hi your_username! You've successfully authenticated, but GitHub does not provide shell access.
+
+You are good to go!
+
+*approx_time (5mins)*
 
 
 PART IV - Installing Rails
