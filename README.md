@@ -234,7 +234,7 @@ When you run this command, bundler is going to automatically install the postgre
 
 The next step is to create a user with a password.
 	
-`sudo -u postgres psql newuser` will create a new user named "newuser" and send you into the postgresql terminal.
+`sudo -u postgres install psql newuser` will create a new user named "newuser" and send you into the postgresql terminal.
 
 `\password newuser` will allow you to create a password for your new user, which you will be asked to type into the terminal.
 
