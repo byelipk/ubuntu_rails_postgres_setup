@@ -4,7 +4,7 @@ Set up a virtual environment for Rails development on Ubuntu 12.04LTS
 This is an aide-memoire on the steps to installing Rails v 4.0.2, Ruby v 2.0.0, and
 Postgresql 9.3 on Ubuntu 12.04LTS running on a VMWare Player virtual machine. 
 
-This is NOT meant to be comphrehensive, and is aimed at developers who have been working with ruby and rails
+This is aimed at developers who have been working with ruby and rails
 in a Windows environment, but now seek to switch over to a unix development environment.
 
 Why use a virtual environment for rails development?
@@ -22,14 +22,9 @@ and it is good practice to develop in the environment your application will be r
 ###For the beginner
 
 If you are starting out learning rails and or ruby, you will find that many of the quality screencasts and 
-online tutorials available are written on a unix system (either Linux or Mac). Following along can be somewhat
-tricky because you are seeing all these different symbols and commands and directory structures that are not
-applicable to your situation. Even the code snippets you find on Github, Heroku, and in rails books use unix 
-symbology. 
-
-Your Windows-geard brain has to filter these distractions out, abstract the useful information, and apply it to 
-your current situation in the Windows environment. The cost of that tiny extra amount of energy it takes your 
-brain to process all these additonal tasks takes it toll over time. 
+online tutorials available are written on a unix system (either Linux or Mac). Following along can be tedious
+because some of the essential symbols, commands, and directory structures used are not applicable to your Windows 
+environment.  
 
 Computer programming and web development are complicated enough subjects on their own. So, it is wise to do what 
 you can to minimize the distractions you have control over. You will experience a much improved workflow, and will have 
@@ -125,8 +120,8 @@ Once your system is updated, you can install the dependencies you will need.
 
 Copy the command inside the below and paste it into your terminal:
 
-`sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev libreadline-dev libyaml-dev 
-libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev`
+	sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev 
+	libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev
 
 
 ###Install RVM
@@ -145,10 +140,8 @@ Paste these commands line-by-line into the terminal:
 	ruby -v
 
 
-Essentially, we're downloading RVM (notice that it is not with `apt-get`), and then installing Ruby.
+Essentially, we're downloading RVM (with cURL, not apt-get), and then installing Ruby.
 		
-I will forgoe a breakdown of these commands for the moment, but will post it when I know exactly what is going on.
-
 Run this command to tell RubyGems not to install documentation for each package locally:
 
 `echo "gem: --no-ri --no-rdoc" > ~/.gemrc` 
@@ -163,7 +156,7 @@ Note: You will need to create an account if you do not already have one. Go here
 
 Before you run the following commands, just review this GitHub page on generating ssh keys: https://help.github.com/articles/generating-ssh-keys 
 
-Now you can run these commands:
+Now you can run:
 
 	git config --global color.ui true
 	git config --global user.name "your_username"
@@ -172,17 +165,15 @@ Now you can run these commands:
 
 Make sure you are logged into GitHub, then navigate to this page:https://github.com/settings/ssh
 
-Run this command `cat ~/.ssh/id_rsa.pub` and use the output to add a new ssh key.
+Run `cat ~/.ssh/id_rsa.pub` and paste the output into the "Key" field, then give your key a descriptive title.
 
-Check to see if all of that actually worked by running the following command: 
+Check to see if all of that actually worked by running: `ssh -T git@github.com
 
-`ssh -T git@github.com
-
-You should receive a response like this:
+If you receive a response like this:
 
 	Hi your_username! You've successfully authenticated, but GitHub does not provide shell access.
 
-You are good to go!
+then you are good to go!
 
 *approx_time (5mins)*
 
@@ -195,9 +186,10 @@ we have to take care of before we can install rails.
 
 The Rails asset pipeline requires a javascript runtime in order for it to, for example, precompile Sass into CSS
 and CoffeeScript into JavaScript. The Rails 4 Gemfile comes with a pre-commented out command to install 'therubyracer' 
-gem, which would supply your Rails project with the necessary javascript runtime. But we can also install NodeJS, an interesting
-technology in its own right, giving us a global runtime. Because it is so simple just to uncomment `gem 'therubyracer'`, 
-we will do here go through installing NodeJS.
+gem, which would supply your Rails project with the necessary javascript runtime. But we can also install NodeJS, 
+an interesting technology in its own right, which gives us a global javascript runtime. 
+
+Because it is so simple just to uncomment `gem 'therubyracer'`, we will go through installing NodeJS.
 
 Visit NodeJS to learn more: http://nodejs.org/
 
@@ -208,8 +200,11 @@ Run these commands in order:
 	sudo apt-get update
 	sudo apt-get install nodejs
 	
+Now run `node -v` to confirm that Node.js was installed properly.
 
-With your javascript runtime in place, now you can `gem install rails`. Yay! Now, quick... run `rails -v` to make sure it worked.
+With your javascript runtime in place, now you can `gem install rails`.
+
+Yay! Now, quick... run `rails -v` to make sure it worked.
 
 
 PART V - Installing Postgresql-9.3
@@ -221,10 +216,25 @@ Run these commands to install PostgresQL 9.3 and PGAdmin 3, a graphical user int
 	sudo sh -c "echo 'deb http://apt.postgresql.org/pub/repos/apt/ precise-pgdg main' > /etc/apt/sources.list.d/pgdg.list"
 	wget --quiet -O - http://apt.postgresql.org/pub/repos/apt/ACCC4CF8.asc | sudo apt-key add -
 	sudo apt-get update		
-	sudo apt-get postgresql-9.3 pgadmin3
+	sudo apt-get install postgresql-9.3 pgadmin3
 	
+Now let's create a new user for our PostgreSQL database. 
 
-Normally, the first thing you do after installing Postgres is to try and set up a test rails application using <rails new myapp -d postgresql>
+To switch into the PostgreSQL command line interface, run: `sudo -u postgres psql postgres`
+
+You are now in the command line as the postgres `SUPERUSER`. Generally, it is not a good idea to connect
+to your databases via the `SUPERUSER`, so we are going to create a new user.
+
+  CREATE ROLE new_role CREATEDB LOGIN PASSWORD 'new_role_password';
+
+You can confirm your new user is created by typing `\du`. Your user should show up in the generated list.
+
+TODO: login to command line with new user
+TODO: run `CREATE EXTENSION hstore;` on tamplate database
+
+Normally, the first thing you might want to do after installing PostgreSQL is to give yourself a little sanity check
+by setting up a test rails application using `rails new myapp -d postgresql`.
+
 When you run this command, bundler is going to automatically install the postgres gem <pg>. 
 
 *This was a failing step for me until I ran this command to install a missing dependency*:
