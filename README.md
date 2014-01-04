@@ -123,7 +123,8 @@ Copy the command inside the below and paste it into your terminal:
 	sudo apt-get install git-core curl zlib1g-dev build-essential libssl-dev 
 	libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev
 
-
+*Note: you can copy and paste this code snippet into one line in your terminal. I added another row
+just for readability purposes. *
 ###Install RVM
 
 We will use *Ruby Version Manager* (RVM) to handle installing Ruby, as well as other gems.
@@ -244,7 +245,7 @@ When you run this command, bundler is going to automatically install the postgre
 
 The next step is to create a user with a password.
 	
-`sudo -u postgres install psql newuser` will create a new user named "newuser" and send you into the postgresql terminal.
+`sudo -u postgres psql newuser` will create a new user named "newuser" and send you into the postgresql terminal.
 
 `\password newuser` will allow you to create a password for your new user, which you will be asked to type into the terminal.
 
