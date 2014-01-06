@@ -286,9 +286,9 @@ against the database. What we need to query right now is the location of
 
 You should now see a path to the file location. 
 
-Mine was `/etc/postgresql/9.3/min/pg_hba.conf`.
+Mine was `/etc/postgresql/9.3/main/pg_hba.conf`.
 
-If your path is the same as mine, you would type `cd /etc/postgresql/9.3/min/`
+If your path is the same as mine, you would type `cd /etc/postgresql/9.3/main/`
 to change into the directory. In order to edit the file, you will need
 `SUPERUSER` privilages, which you get when you use `sudo`. 
 
@@ -389,6 +389,16 @@ All we needed to do was make a tiny modification to `database.yml`.
 
 Notice that I added `host: localhost` in the configuration settings. This has
 the same effect as does modifying `pg_hba.conf`!  
+
+However, if you expect to be using the CLI at all, I reccomend against this
+method because it does not give your user the ability to enter the command line.
+
+For example, if you had not modified `pg_hba.conf`, you would not be able to log
+into your database like so: `psql -d test_app_development -U test_app -W`
+
+Again, if you have no need to modify your database via the command line, then
+this streamlined method will be fine. Otherwise, it is worth the extra
+configuration.
 
 Text Editors	
 ------------
