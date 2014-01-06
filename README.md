@@ -219,38 +219,152 @@ Run these commands to install PostgresQL 9.3 and PGAdmin 3, a graphical user int
 	sudo apt-get update		
 	sudo apt-get install postgresql-9.3 pgadmin3
 	
-Now let's create a new user for our PostgreSQL database. 
+*Note that on Ubuntu, PostgreSQL will be installed in `/usr/share/postgresql`*
 
-To switch into the PostgreSQL command line interface, run: `sudo -u postgres psql postgres`
-
-You are now in the command line as the postgres `SUPERUSER`. Generally, it is not a good idea to connect
-to your databases via the `SUPERUSER`, so we are going to create a new user.
-
-  CREATE ROLE new_role CREATEDB LOGIN PASSWORD 'new_role_password';
-
-You can confirm your new user is created by typing `\du`. Your user should show up in the generated list.
-
-TODO: login to command line with new user
-TODO: run `CREATE EXTENSION hstore;` on tamplate database
-
-Normally, the first thing you might want to do after installing PostgreSQL is to give yourself a little sanity check
-by setting up a test rails application using `rails new myapp -d postgresql`.
-
-When you run this command, bundler is going to automatically install the postgres gem <pg>. 
-
-*This was a failing step for me until I ran this command to install a missing dependency*:
+Now we need to install a dependency that will allow Bundler to run `gem install 'pg'` automatically when we set up
+a new rails app with PostgreSQL.
 
 	sudo apt-get install libpq-dev
 
 
-The next step is to create a user with a password.
-	
-`sudo -u postgres psql newuser` will create a new user named "newuser" and send you into the postgresql terminal.
+### Create new rails app
 
-`\password newuser` will allow you to create a password for your new user, which you will be asked to type into the terminal.
+Let's try and create a sample application with a PostgreSQL database just as a
+sanity check. Make sure you are in the home directory by running `cd ~/`. 
+(Just to confirm, if you run `pwd`, it should say `/home/whatever_your_username_is`.)
+
+Let's go into the Documents directory and create a Dev directory, into which we will put our rails test app. 
+
+Run these commands:
+
+	cd Documents
+	mkdir Dev
+	cd Dev
+
+Run this command in the terminal: `rails new test_app -d postgresql`
+
+Change into the `test_app` directory and run `rails start`. You should see the
+server start up normally. 
+
+Now open up your web browser and navigate to `localhost:3000`.
+
+You should see an error similar to `PG::ConnectionBad` with a message like
+`FATAL: Peer authentication failed for user 'test_app'`
+
+This error happened because when we generated the new rails app, rails used
+our application name, `test_app`, to create a new database. In other words, rails
+assumed that `test_app` was a valid PostgeSQL user with certain privilages -
+namely that `test_user` could create a new database. But we never created a new
+user with the power to create a new database.
+
+###Configure PostgreSQL
+
+To get a clearer understanding, we are going to first modify a file within
+PostgreSQL's directory structure called `pg_hba.conf`, create a new `test_app` role within
+PostgreSQL, and then open up a file named `database.yml` in our application's
+`config` folder. 
+
+First, you need to stop the rails server by pressing `CTRL-c`.
+
+To modify `pg_hba.conf` we are going to need to work in the PostgreSQL command
+line interface. In the terminal type `sudo -u postgres psql`. This logs you in
+as the `postgres` superuser. Now that you are in the CLI you can run queries 
+against the database. What we need to query right now is the location of 
+`pg_hba.conf` so we can modify it. Run this query: 
+
+	SHOW hba_file;
+
+You should now see a path to the file location. 
+
+Mine was `/etc/postgresql/9.3/min/pg_hba.conf`.
+
+If your path is the same as mine, you would type `cd /etc/postgresql/9.3/min/`
+to change into the directory. In order to edit the file, you will need
+`SUPERUSER` privilages, which you get when you use `sudo`. 
+
+Open the file by typing `sudo gedit pg_hba.conf`.
+
+Scroll to the bottom of the file where you will make one change. You should see
+a table structure like this:
+
+	# Type	Database	USER	ADDRESS		METHOD
+	  ----------------------------------------------------
+	  local all		all			peer
+
+Where you see `peer`, change this one instance of `peer` to `md5` then save the
+file.
+
+When you are back on the command line you need to restart PostgreSQL by running
+`sudo service postgresql restart`.
+
+### Create a new role
+
+We are going to drop back into the PostgreSQL command line to create a new
+user "role".
+
+Run: `sudo -u postgres psql postgres`
+
+Remember, we need to give this role certain privilages. First, it needs to be
+able to create a new database, and it needs to be able to login with a password.
+We are going to follow rails conventions and name our role `test_app'. To make 
+all this happen we run this SQL query:
+
+	CREATE ROLE test_app CREATEDB LOGIN PASSWORD 'secret';
+
+With the new role created, you can log out of the CLI with `\q` and return to
+the root directory of your rails application.
+
+### Modify database.yml
+
+Change into the application's `config` folder by running `cd config` and open up the database
+configuration file by running `gedit database.yml`.
+
+*GEDIT is a text editor that comes packaged into an Ubuntu installation.*
+
+If you examine the file you will notice that rails is trying to configure
+databases for three kinds of *environments* - development, test, and production.
+Let's take a quick look at the configuration settings for the development
+environment.
+
+	development:
+		adapter: postgresql
+		encoding: unicode
+		database: test_app_development
+		pool: 5
+		username: test_app
+		password:
+
+The two things to point out right off the bat are the settings for `database` and
+`username`. Here we see that rails wants to create a database called
+`test_app_development` and wants to connect to it with a username called
+`test_app`.
+
+Ensure that, for each environment, you include the username and password you used created previously in postgresql, 
+and that you set `host: localhost`. Your code should look like this:
 
 	
-A slight detour
+	development:
+	  adapter: postgresql
+	  encoding: unicode
+	  database: test_app_development 
+	  host: localhost
+	  pool: 5
+	  username: test_app 
+	  password: secret	
+
+
+Now, go back one level into your application's root directory by running `cd ../` and set up your database
+by running `rake db:create`. 
+
+If you see no indication of success or failure upon the completion of the command, that means it succeeded! Yay! 
+
+Now run `rails s` to start your server. When the server is loaded, fire up firefox and goto localhost:3000
+and you should see a page telling you that you are riding ruby on rails, or something like that... 
+
+Congrats!	
+
+
+Editors	
 ------------
 
 There is just one last thing to do before you can create a test app and launch it, and it requires a text editor and a little knowledge
@@ -263,70 +377,4 @@ a lite version, so to upgrade to the full-featured version, run `sudo apt-get in
 You should also pick up `gvim`, which sports a graphical user interface by running `sudo apt-get install gvim`. 
 
 If you are not familiar with `vim`, just use `gedit` for this step.
-
-
-Back on track
--------------
-
-Ok, now we want to make a test application to see that we installed everything correctly. 
-
-Make sure you are in the home directory by running `cd ~/`. (Just to confirm, if you run `pwd`, it should say `/home/whatever_your_username_is`.)
-
-
-Let's go into the Documents directory and create a Dev directory, into which we will put our rails test app. 
-
-Run these commands:
-
-	cd Documents
-	mkdir Dev
-	cd Dev
-
-Now, let's make our rails test app by running: 
-
-	rails new myapp -d postgresql
-
-
-Use `cd myapp` to change into the myapp directory. 
-
-Run `cd config` to enter the config directory. Now type `gedit database.yml` or `vim database.yml` in order to open up the database 
-configuration file in your text editor of choice. 
-
-You should look for code like this for development, testing, and production environments:
-
-	
-	development:
-	  adapter: postgresql
-	  encoding: unicode
-	  database: myapp_development 
-	  pool: 5
-	  username: 
-	  password: 	
-	
-
-There is a little bit of configuration we need to do so we do not run into any errors when we launch our app.
-
-Ensure that, for each environment, you include the username and password you used created previously in postgresql, 
-and that you set `host: localhost`. Your code should look like this:
-
-	
-	development:
-	  adapter: postgresql
-	  encoding: unicode
-	  database: myapp_development 
-	  host: localhost
-	  pool: 5
-	  username: new_user
-	  password: password	
-	
-
-
-Now, go back one level into your application's root directory by running `cd ../` and set up your database
-by running `rake db:create`. 
-
-If you see no indication of success or failure upon the completion of the command, that means it succeeded! Yay! 
-
-Now run `rails s` to start your server. When the server is loaded, fire up firefox and goto localhost:3000
-and you should see a page telling you that you are riding ruby on rails, or something like that... 
-
-Congrats!	
 
