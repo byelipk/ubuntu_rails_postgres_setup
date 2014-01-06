@@ -259,10 +259,20 @@ user with the power to create a new database.
 
 ###Configure PostgreSQL
 
-To get a clearer understanding, we are going to first modify a file within
-PostgreSQL's directory structure called `pg_hba.conf`, create a new `test_app` role within
-PostgreSQL, and then open up a file named `database.yml` in our application's
-`config` folder. 
+As far as resolving the `PG::ConnectionBad` is concerned, there are two ways we can handle
+this. We can either modify a file in postgres' directory structure, or modify
+`database.yml` in the `config` folder in your rails app. The latter is
+considerably easier, so I will walk you through the more involved method and
+make a note at the bottom of this guide that walks you through the *easy* way.
+
+Just to recap what we are about to do, we are going to
+
+* modify a file within PostgreSQL's directory structure called `pg_hba.conf` 
+
+* create a new `test_app` role within PostgreSQL with the proper privilages 
+
+* and then modify a file named `database.yml` in our application's `config` 
+folder with our new login information 
 
 First, you need to stop the rails server by pressing `CTRL-c`.
 
@@ -327,12 +337,12 @@ Let's take a quick look at the configuration settings for the development
 environment.
 
 	development:
-		adapter: postgresql
-		encoding: unicode
-		database: test_app_development
-		pool: 5
-		username: test_app
-		password:
+	  adapter: postgresql
+	  encoding: unicode
+	  database: test_app_development
+	  pool: 5
+	  username: test_app
+	  password:
 
 The two things to point out right off the bat are the settings for `database` and
 `username`. Here we see that rails wants to create a database called
@@ -341,17 +351,14 @@ The two things to point out right off the bat are the settings for `database` an
 
 Ensure that, for each environment, you include the username and password you used created previously in postgresql, 
 and that you set `host: localhost`. Your code should look like this:
-
 	
 	development:
 	  adapter: postgresql
 	  encoding: unicode
 	  database: test_app_development 
-	  host: localhost
 	  pool: 5
 	  username: test_app 
 	  password: secret	
-
 
 Now, go back one level into your application's root directory by running `cd ../` and set up your database
 by running `rake db:create`. 
@@ -363,8 +370,27 @@ and you should see a page telling you that you are riding ruby on rails, or some
 
 Congrats!	
 
+APPENDIX-A
+----------
 
-Editors	
+Remember when I said there was an easy way to resolve the `PG::ConnectionBad`
+error you saw upon navigating to `localhost:3000`? Well, here it is...
+
+All we needed to do was make a tiny modification to `database.yml`.
+
+	development:
+	  adapter: postgresql
+	  encoding: unicode
+	  database: test_app_development 
+          host: localhost
+	  pool: 5
+	  username: test_app 
+	  password: secret	
+
+Notice that I added `host: localhost` in the configuration settings. This has
+the same effect as does modifying `pg_hba.conf`!  
+
+Text Editors	
 ------------
 
 There is just one last thing to do before you can create a test app and launch it, and it requires a text editor and a little knowledge
