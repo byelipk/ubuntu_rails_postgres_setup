@@ -382,7 +382,7 @@ All we needed to do was make a tiny modification to `database.yml`.
 	  adapter: postgresql
 	  encoding: unicode
 	  database: test_app_development 
-          host: localhost
+	  host: localhost
 	  pool: 5
 	  username: test_app 
 	  password: secret	
@@ -399,6 +399,16 @@ into your database like so: `psql -d test_app_development -U test_app -W`
 Again, if you have no need to modify your database via the command line, then
 this streamlined method will be fine. Otherwise, it is worth the extra
 configuration.
+
+APPENDIX-B
+----------
+
+To enable hstore in your database run these commands:
+
+	sudo -u postgres psql
+	CREATE EXTENSION hstore;
+
+Now you can use the hstore data type.
 
 Text Editors	
 ------------
