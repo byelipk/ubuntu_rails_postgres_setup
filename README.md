@@ -416,6 +416,17 @@ Now the `hstore` extension should be available so you can install it like so:
 
 You must repeat this step for the test database as well. 
 
+If you are gettings errors such as `PG::InsufficientPrivilege: ERROR: permission
+denied to create extension "hstore"` then you can load hstore in one of
+PostgreSQL's template databases. 
+
+	sudo -u postgres psql template1
+	CREATE EXTENSION hstore;
+
+Whenever PostgreSQL creates a new database, it builds it off of a template. By
+adding hstore to `template1`, we ensure that all future databases will be
+enabled with the hstore data type.
+
 Now you can use the hstore data type.
 
 Text Editors	
