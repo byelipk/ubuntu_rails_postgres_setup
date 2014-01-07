@@ -124,10 +124,11 @@ Copy the command inside the below and paste it into your terminal:
 	libreadline-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt1-dev
 
 *Note: you can copy and paste this code snippet into one line in your terminal. I added another row
-just for readability purposes. *
+just for readability purposes.* 
+
 ###Install RVM
 
-We will use *Ruby Version Manager* (RVM) to handle installing Ruby, as well as other gems.
+We will use Ruby Version Manager (RVM) to handle installing Ruby, as well as other gems.
 
 Paste these commands line-by-line into the terminal:
 
@@ -145,7 +146,7 @@ Essentially, we're downloading RVM (with cURL, not apt-get), and then installing
 		
 Run this command to tell RubyGems not to install documentation for each package locally:
 
-`echo "gem: --no-ri --no-rdoc" > ~/.gemrc` 
+	`echo "gem: --no-ri --no-rdoc" > ~/.gemrc` 
 			
 *approx_time (5mins)*
 
@@ -168,7 +169,7 @@ Make sure you are logged into GitHub, then navigate to this page:https://github.
 
 Run `cat ~/.ssh/id_rsa.pub` and paste the output into the "Key" field, then give your key a descriptive title.
 
-Check to see if all of that actually worked by running: `ssh -T git@github.com
+Check to see if all of that actually worked by running: `ssh -T git@github.com`
 
 If you receive a response like this:
 
@@ -403,10 +404,17 @@ configuration.
 APPENDIX-B
 ----------
 
-To enable hstore in your database run these commands:
+To enable hstore in your database, you need to first install the postgresql
+extension.
 
-	sudo -u postgres psql
+	sudo apt-get install postgresql-contrib
+
+Now the `hstore` extension should be available so you can install it like so:
+
+	sudo -u postgres psql test_app_development
 	CREATE EXTENSION hstore;
+
+You must repeat this step for the test database as well. 
 
 Now you can use the hstore data type.
 
